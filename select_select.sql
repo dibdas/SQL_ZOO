@@ -19,3 +19,33 @@ SELECT name ,continent from world WHERE continent IN ( SELECT continent from wor
 --4.Which country has a population that is more than Canada but less than Poland? Show the name and the population.
 SELECT name,population from world WHERE population >(SELECT population from world WHERE name= 'Canada') AND population <(SELECT population from world WHERE name ='Poland')
       
+
+--5.Germany (population 80 million) has the largest population of the countries in Europe.
+-- Austria (population 8.5 million) has 11% of the population of Germany.
+--Show the name and the population of each country in Europe. Show the population as a percentage of the population of Germany.
+SELECT name,CONCAT(ROUND(100*population/(SELECT population from world WHERE name='Germany')),'%') from world WHERE continent = 'Europe'
+
+
+--6.Which countries have a GDP greater than every country in Europe? [Give the name only.] (Some countries may have NULL gdp values)
+SELECT name from world WHERE gdp >  (SELECT max(gdp) from world WHERE continent = 'Europe')
+
+
+--7.Find the largest country (by area) in each continent, show the continent, the name and the area:
+SELECT continent, name, area FROM world x
+  WHERE area >= ALL
+    (SELECT area FROM world y
+        WHERE y.continent=x.continent
+          AND population>0)
+
+
+--8.List each continent and the name of the country that comes first alphabetically.
+SELECT continent,name from world x WHERE name <= ALL (SELECT name from world y WHERE y.continent = x.continent order by name )
+
+
+--9.Find the continents where all countries have a population <= 25000000. Then find the names of the countries associated with these continents. Show name, continent and population.
+SELECT name,continent,population from world x WHERE 25000000 >= ALL (SELECT population from world y WHERE x.continent=y.continent)
+
+
+--10.Some countries have populations more than three times that of any of their neighbours (in the same continent). Give the countries and continents.
+SELECT name,continent from world x WHERE population >= ALL (SELECT (3*population) from world y WHERE x.continent = y.continent AND x.name<> y.name )
+
