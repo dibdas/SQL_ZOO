@@ -64,3 +64,8 @@ JOIN stops stopa ON (a.stop=stopa.id)
 JOIN stops stopb ON (b.stop=stopb.id)
 WHERE stopa.name='Craiglockhart' AND stopb.name= 'Tollcross'
 
+
+
+
+--9. I could not solve it I will solve it later 
+--10. I will solve it later 
